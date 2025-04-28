@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  # ===== 1) Tableau de bord Docker =====
+  portainer:
+    image: portainer/portainer-ce:2.20.3
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - "9443:9443"        # UI HTTPS
+      - "8000:8000"        # Edge agent (optionnel)
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${DATA_ROOT}/portainer:/data"
+
+  # ===== 2) Serveur multimédia =====
+  jellyfin:
+    image: jellyfin/jellyfin:10.9.6
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"        # HTTP
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - "${DATA_ROOT}/jellyfin/config:/config"
+      - "${DATA_ROOT}/media/movies:/media/movies:ro"
+      - "${DATA_ROOT}/media/series:/media/series:ro"
+
+  # ===== 3) Tableau de bord des services =====
+  homepage:
+    image: ghcr.io/gethomepage/homepage:v0.8.5
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - "${DATA_ROOT}/homepage/config:/app/config"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+networks:
+  default:
+    name: tp3-net
