@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   portainer:
-    image: portainer/portainer-ce:2.20.3
+    image: portainer/portainer-ce:latest
     container_name: portainer
     restart: unless-stopped
     ports:
@@ -12,7 +12,7 @@ services:
       - "${DATA_ROOT}/portainer:/data"
 
   jellyfin:
-    image: jellyfin/jellyfin:10.9.6
+    image: jellyfin/jellyfin:latest
     container_name: jellyfin
     restart: unless-stopped
     ports:
@@ -27,7 +27,7 @@ services:
       - "${DATA_ROOT}/media/series:/media/series:ro"
 
   homepage:
-    image: ghcr.io/gethomepage/homepage:v0.9.13
+    image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     restart: unless-stopped
     ports:
